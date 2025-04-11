@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Humanizer;
-using Random;
+
 
 namespace SpeedType
 {
@@ -27,8 +27,8 @@ namespace SpeedType
         /// </remarks>
         public SentenceProvider()
         {
-            random = GetRandomSentence()
-            
+            random = new Random();
+
             string directoryPath = Path.GetFullPath(
                 Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"
@@ -40,7 +40,18 @@ namespace SpeedType
 
             if (File.Exists(filePath))
             {
-                sentences = GetRandomSentence;
+                StreamReader sr = File.OpenText(filePath);
+                int countLines = sr.ReadToEnd().Split("\n").Length;
+                sr.Close();
+                sr = File.OpenText(filePath);
+                sentences = new string[countLines];
+                string s;
+                int index = 0;
+                while ((s = sr.ReadLine()) != null)
+                {
+                    sentences[index] = s;
+                    index++;
+                }
             }
             else
             {
@@ -58,11 +69,10 @@ namespace SpeedType
         /// </returns>
         public string GetRandomSentence()
         {
-            using (StreamReader reader = new StreamReader("sentences.txt"))
-            {
-                string lines = reader.ReadLine();
-                return lines;
-            }
+            
+                //return random sentence from all the lines
+                return sentences[random.Next(0, sentences.Length)];
+            
         }
     }
 }
