@@ -40,7 +40,7 @@ namespace SpeedType
 
             if (File.Exists(filePath))
             {
-                sentences = GetRandomSentence();
+                sentences = GetRandomSentence(sentence);
             }
             else
             {
@@ -56,22 +56,16 @@ namespace SpeedType
         /// A <see cref="string"/> representing a randomly selected sentence 
         /// from the array of sentences.
         /// </returns>
-        public string GetRandomSentence(string sentence)
+        public string GetRandomSentence()
         {
-
             using (StreamReader reader = new StreamReader("sentences.txt"))
             {
-                string content = reader.ReadToEnd();
+                string line = reader.ReadLine();
             
-                string[] split = content.Split("\n");
-                string sentence = split[random.Next()];
-
+                string[] split = line.Split("\n");
+                string sentence = split[random.Next(line.Length)];
                 return sentence;
             }
-
-            
-
-            //random de 30 linhad
         }
     }
 }
