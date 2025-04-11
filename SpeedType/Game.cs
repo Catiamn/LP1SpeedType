@@ -161,10 +161,7 @@ namespace SpeedType
             {
                 if (gameStats[i] == null)
                 {
-                   if (gameStats[i] == null)
-                    {
-                        return;
-                    }
+                   break;
                 }
                 // Add row to table
                 // Table.AddRow() only accepts strings
