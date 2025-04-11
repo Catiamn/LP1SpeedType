@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Humanizer;
 using Spectre.Console;
 
 namespace SpeedType
@@ -30,7 +31,9 @@ namespace SpeedType
         /// </summary>
         public Game()
         {
-            // ////////// => TO IMPLEMENT <= //////////// //
+            gameStats = new GameResult[10];
+            sentenceProvider = new SentenceProvider();
+            evaluator = new Evaluator();
         }
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace SpeedType
         private void StartGame()
         {
             // The sentence that will be presented to the player.
-            string sentence = // ////////// => TO IMPLEMENT <= //////////// //
+            string sentence = new SentenceProvider().GetRandomSentence().Humanize();
 
             AnsiConsole.Clear();
             AnsiConsole.MarkupLine("[bold green]Type This Sentence:[/]");
@@ -102,22 +105,26 @@ namespace SpeedType
             // The time taken by the user to type the sentence.
             double timeTaken = stopwatch.Elapsed.TotalSeconds;
 
+
             // The words per minute (WPM) calculated based on the time taken 
             // and the user input.
-            double wpm = // ////////// => TO IMPLEMENT <= //////////// //
+            //WORDS PER MINUTE
+            double wpm = evaluator.CalculateWPM(userInput, timeTaken); //PROBABLY WRONG COME BACK LATER
 
             // The accuracy percentage calculated based on the user's input and
             // the original sentence.
-            int accuracy = // ////////// => TO IMPLEMENT <= //////////// //
+          
+
+            int accuracy = evaluator.CalculateAccuracy(userInput, sentence);
 
             // Shift existing entries
             for (int i = gameStats.Length - 1; i > 0; i--)
             {
-                // ////////// => TO IMPLEMENT <= //////////// //
+                gameStats[i] = gameStats[i - 1];
             }
 
             // Add new result at the beginning
-            gameStats[0] = // ////////// => TO IMPLEMENT <= //////////// //
+            gameStats[0] = new GameResult(wpm, accuracy, timeTaken);
 
             AnsiConsole.MarkupLine("\n[bold yellow]Results:[/]");
             AnsiConsole.MarkupLine($"[bold]Time Taken:[/] {timeTaken:F2} " +
@@ -154,12 +161,17 @@ namespace SpeedType
             {
                 if (gameStats[i] == null)
                 {
-                    // ////////// => TO IMPLEMENT <= //////////// //
+                   if (gameStats[i] == null)
+                    {
+                        return;
+                    }
                 }
-
                 // Add row to table
                 // Table.AddRow() only accepts strings
-                // ////////// => TO IMPLEMENT <= //////////// //
+                table.AddRow( gameStats[i].WPM.ToString());
+                table.AddRow (gameStats[i].Accuracy.ToString());
+                table.AddRow(gameStats[i].TimeTaken.ToString());
+
             }
 
             AnsiConsole.Write(table);

@@ -27,7 +27,7 @@ namespace SpeedType
         /// </remarks>
         public SentenceProvider()
         {
-            random = 
+            random = GetRandomSentence()
             
             string directoryPath = Path.GetFullPath(
                 Path.Combine(
@@ -40,7 +40,7 @@ namespace SpeedType
 
             if (File.Exists(filePath))
             {
-                sentences = GetRandomSentence(sentence);
+                sentences = GetRandomSentence;
             }
             else
             {
@@ -60,11 +60,8 @@ namespace SpeedType
         {
             using (StreamReader reader = new StreamReader("sentences.txt"))
             {
-                string line = reader.ReadLine();
-            
-                string[] split = line.Split("\n");
-                string sentence = split[random.Next(line.Length)];
-                return sentence;
+                string lines = reader.ReadLine();
+                return lines;
             }
         }
     }
